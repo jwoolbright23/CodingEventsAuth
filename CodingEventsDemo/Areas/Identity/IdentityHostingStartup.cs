@@ -17,7 +17,7 @@ namespace CodingEventsDemo.Areas.Identity
             builder.ConfigureServices((context, services) => {
                 services.AddDbContext<EventDbContext>(options =>
                     options.UseSqlServer(
-                        context.Configuration.GetConnectionString("DefaultConnection")));
+                        context.Configuration.GetConnectionString("EventDbContextConnection")));
 
                 services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                     .AddEntityFrameworkStores<EventDbContext>();
