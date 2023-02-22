@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using CodingEventsDemo.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,10 +17,21 @@ builder.Services.AddRazorPages();
 // working with the .NET 6 (specifically the lack of a Startup.cs)
 //https://learn.microsoft.com/en-us/aspnet/core/migration/50-to-60-samples?view=aspnetcore-6.0#add-configuration-providers
 
-var connectionString = "server=localhost;user=root;password=thereisapatt3rn;database=coding_events";
-var serverVersion = new MySqlServerVersion(new Version(8, 0, 29));
 
-builder.Services.AddDbContext<EventDbContext>(dbContextOptions => dbContextOptions.UseMySql(connectionString, serverVersion));
+var serverVersion = new MySqlServerVersion(new Version(8, 0, 29));
+var defaultConnection = @"Server=some-mysql;userid=coding_events;password=coding_events;database=coding_events";
+
+builder.Services.AddDbContext<EventDbContext>(options =>
+options.UseMySql(defaultConnection, serverVersion));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<EventDbContext>();
+builder.Services.AddRazorPages();
+
+// var connectionString = "server=localhost;user=root;password=thereisapatt3rn;database=coding_events";
+// var serverVersion = new MySqlServerVersion(new Version(8, 0, 29));
+
+// builder.Services.AddDbContext<EventDbContext>(dbContextOptions => dbContextOptions.UseMySql(connectionString, serverVersion));
 
 //--- end of connection syntax
 
